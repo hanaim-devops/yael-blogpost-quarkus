@@ -1,5 +1,9 @@
 # Van microservices naar Quarkus
 
+Door: Yael Bakker - [me@yael.fyi](mailto:me@yael.fyi)
+
+[![GitHub followers](https://img.shields.io/github/followers/yvbakker.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/Naereen?tab=followers)
+
 Wij als ontwikkelaars vragen ons natuurlijk altijd af: kan het nóg efficiënter? (hoe minder werk, hoe beter)
 
 Zoals agile begin 2001 op kwam in het methodiekenlandschap (Kooijman, 2016), zo kwam devops en microservices de afgelopen jaren op in de hands-on kant van ons vakgebied. Dit is allemaal leuk en aardig, maar: kan het dan nóg leaner?
@@ -10,7 +14,7 @@ TLDR; dat kan! Lees snel verder >>
 
 ![Van atoom tot quark](atom-quark.jpg "Van atoom tot quark")
 
-Quarkus is net zo iets: het vormt de bouwstenen van een microservices architectuur. Een microservices architectuur geënt op Java dan wel niet te verstaan. Hoe dit in zijn werk gaat, wat de voordelen hiervan zijn én hoe je dit implementeert lees je in deze blogpost. Tevens geef ik je een aantal korte handvatten om zelf aan de slag te gaan met Quarkus in jouw project. Dit is een aanvulling op bestaande, [officiële handleidingen](https://quarkus.io/guides/getting-started).
+Quarkus is net zo iets als hierboven staat afgebeeld: het vormt de bouwstenen van een microservices architectuur. Een microservices architectuur geënt op Java dan wel niet te verstaan. Hoe dit in zijn werk gaat, wat de voordelen hiervan zijn én hoe je dit implementeert lees je in deze blogpost. Tevens geef ik je een aantal korte handvatten om zelf aan de slag te gaan met Quarkus in jouw project. Dit is een aanvulling op bestaande, [officiële handleidingen](https://quarkus.io/guides/getting-started). (QuarkusIO, 2021)
 
 ## Waarom Quarkus?
 
@@ -182,11 +186,13 @@ public class CustomerResource {
 
 ## Bevindingen
 
-> Gebruik van resources op bestaande CustomerManagementAPI
+### Metingen
+
+> Gebruik van resources op bestaande CustomerManagementAPI (Prometheus)
 
 ![CPU/Geheugengebruik pitstop dotnet](pitstop-dotnet-prometheus.png)
 
-> Gebruik van resources op quarkus CustomerManagementAPI
+> Gebruik van resources op quarkus CustomerManagementAPI (Prometheus)
 
 ![CPU / Geheugengebruik pitstop quarkus (java)](pitstop-quarkus-prometheus.png)
 
@@ -214,6 +220,28 @@ Meer overtuiging heeft het niet nodig: quarkus is duidelijk sneller in dit geval
 
 \*\*Disclaimer: bovenstaande resultaten zijn onderhevig aan vele factoren, en dienen voornamelijk als anekdote over de beweerde perfomance winst van Quarkus. Werkelijk (reproduceerbaar) onderzoek is uiteraard beter opgezet (mag ik hopen).
 
+### Containers
+
+Voor de oplettende kijker: in onze werkmap, onder `/src/main/docker` staan ook enkele Dockerfiles met beschrijving. Deze zijn in principe klaar voor gebruik, en kunnen zo opgenomen wordden in een k8s of docker swarm omgeving.
+
+Doe voordat je hier gebruik van maakt nog wel even: `./mvnw package`. Dit staat ook als commentaar in de Dockerfiles bijgevoegd en zou voor zich moeten spreken.
+
+## En verder…
+
+We hebben even kort gekeken naar Quarkus. Een microservices framework voor Java, met flinke claims betreft performance. Dit hebben we kort kunnen testen a.d.h.v. een voorbeeldapplicatie, waaruit bleek dat hier wel een kern van waarheid in zit.
+
+Om dit zelf te ervaren, en meer te weten te komen over Quarkus, bevat de officiële documentatie vele guides die op, voor jou relevante, specifieke toepassingen in gaan.
+
+Een (relevante) greep uit deze guides:
+
+- [Generating Jax-RS resources with panache](https://quarkus.io/guides/rest-data-panache)
+- [amqp](https://quarkus.io/guides/amqp)
+- [deploying-to-kubernetes](https://quarkus.io/guides/deploying-to-kubernetes)
+
+Verder is het volgende boek wellicht interessant (mochten boeken je ding zijn):
+
+- Tayo Koleoso (August 26, 2020). Beginning Quarkus Framework: Build Cloud-Native Enterprise Java Applications and Microservices 1st Edition. Apress ISBN 1484260317.
+
 ## Bronnen
 
 - Kooijman, B. (2021, 11 augustus). Wat is Agile? De betekenis van Agile werken. Agile Scrum Group. https://agilescrumgroup.nl/wat-is-agile/ Geraadpleegd op 7 oktober 2021.
@@ -222,27 +250,8 @@ Meer overtuiging heeft het niet nodig: quarkus is duidelijk sneller in dit geval
 - Creating Your First Application. (z.d.). Quarkus.io. Geraadpleegd op 6 oktober 2021, van https://quarkus.io/guides/getting-started
 - What is Standard Deviation and how is it important? (2018, 24 september). EduPristine. https://www.edupristine.com/blog/what-is-standard-deviation Geraadpleegd op 7 oktober 2021.
 
-## Hoofdvraag
+## Over de Auteur
 
-Wat zijn de voordelen voor PitStop bij het gebruik van Quarkus. /
-Welke baat heeft PitStop bij het gebruik van Quarkus.
+Yael is een aankomend software developer aan de Hogeschool van Arnhem en Nijmegen. Verder heeft hij twee succesvolle bedrijfjes, en ruim 6 jaar aan relevante werkervaring in het vakgebied. In zijn vrije tijd is Yael vaak te vinden achter zijn espressomachine, waar hij krachtige shots espresso uit tovert, soms aangevuld met hippe melkschuimpatroontjes.
 
-## Deelvragen
-
-### Wat zijn de voordelen van Quarkus?
-
-### Hoe kan ik quarkus gebruiken in de praktijk?
-
-## Info quarkus
-
-- Java framework
-- Start snel op, gebruikt weinig geheugen
-- = Meer applicaties op zelfde hoeveelheid hardware
-- Container first (design pillar)
-- Ahead Of Time compilatie (AOT)
-
-## Zinvolle bronnen
-
-- Tayo Koleoso (August 26, 2020). Beginning Quarkus Framework: Build Cloud-Native Enterprise Java Applications and Microservices 1st Edition. Apress ISBN 1484260317.
-- Alex Soto Bueno, Jason Porter (Jul 14, 2020). Quarkus Cookbook: : Kubernetes-Optimized Java Solutions 1st Edition. OReilly. ISBN 1492062650.
-- Francesco Marchioni (December 13, 2019), Hands-On Cloud-Native Applications with Java and Quarkus: Build high performance, Kubernetes-native Java serverless applications 1st Edition. Packt. ISBN 1838821473
+![Yael Bakker](Author.jpeg)
