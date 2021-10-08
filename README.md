@@ -254,4 +254,4 @@ Verder is het volgende boek wellicht interessant (mochten boeken je ding zijn):
 
 Yael is een aankomend software developer aan de Hogeschool van Arnhem en Nijmegen. Verder heeft hij twee succesvolle bedrijfjes, en ruim 6 jaar aan relevante werkervaring in het vakgebied. In zijn vrije tijd is Yael vaak te vinden achter zijn espressomachine, waar hij krachtige shots espresso uit tovert, soms aangevuld met hippe melkschuimpatroontjes.
 
-![Yael Bakker](Author.jpeg)
+![Yael Bakker](author.jpeg)
