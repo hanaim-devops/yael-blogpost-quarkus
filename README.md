@@ -200,7 +200,7 @@ Response Tijden REST API calls:
 | 4         | 17.019    | 10.6         |
 | 5         | 52.588    | 7.62         |
 
-Als we aan de hand van bovenstaande metingen de standaarddeviatie uitrekenen, komen we op:
+Voor de mate van stabiliteit van deze metingen, kunnnen we snel even de standaarddeviatie (EduPristine, 2017) berekenen:
 
 ![](sample-standard-dev.gif)
 
@@ -208,15 +208,19 @@ Als we aan de hand van bovenstaande metingen de standaarddeviatie uitrekenen, ko
 | ----------------- | -------------------- |
 | 18.257            | 8.817                |
 
+Lager = (in dit geval) stabieler.
+
 Meer overtuiging heeft het niet nodig: quarkus is duidelijk sneller in dit geval.
 
 \*\*Disclaimer: bovenstaande resultaten zijn onderhevig aan vele factoren, en dienen voornamelijk als anekdote over de beweerde perfomance winst van Quarkus. Werkelijk (reproduceerbaar) onderzoek is uiteraard beter opgezet (mag ik hopen).
 
 ## Bronnen
 
-- https://agilescrumgroup.nl/wat-is-agile/
-- https://books.google.nl/books?id=3CMDAAAAMBAJ&pg=PA323&redir_esc=y#v=onepage&q&f=false
-- "Scales of atoms to quarks", http://portal.discoverthecosmos.eu/fi/node/93607 geraadpleegd op 6 oct 2021 [Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)](https://creativecommons.org/licenses/by-nc-sa/3.0/)
+- Kooijman, B. (2021, 11 augustus). Wat is Agile? De betekenis van Agile werken. Agile Scrum Group. https://agilescrumgroup.nl/wat-is-agile/ Geraadpleegd op 7 oktober 2021.
+- Thomson, J. J. & Smithsonian Institution. (1901). On Bodies Smaller Than Atoms. U.S. Government Printing Office. Geraadpleegd op 5 oktober 2021.
+- Nordkvist. (2010). Scales of atoms to quarks [Illustratie]. http://portal.discoverthecosmos.eu/fi/node/93607[Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)](https://creativecommons.org/licenses/by-nc-sa/3.0/) Geraadpleegd op 6 oktober 2021.
+- Creating Your First Application. (z.d.). Quarkus.io. Geraadpleegd op 6 oktober 2021, van https://quarkus.io/guides/getting-started
+- What is Standard Deviation and how is it important? (2018, 24 september). EduPristine. https://www.edupristine.com/blog/what-is-standard-deviation Geraadpleegd op 7 oktober 2021.
 
 ## Hoofdvraag
 
