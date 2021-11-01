@@ -4,9 +4,9 @@ Door: Yael Bakker - [me@yael.fyi](mailto:me@yael.fyi)
 
 [![GitHub followers](https://img.shields.io/github/followers/yvbakker.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/Naereen?tab=followers)
 
-Wij als ontwikkelaars vragen ons natuurlijk altijd af: kan het nóg efficiënter? (hoe minder werk, hoe beter)
+Wij als ontwikkelaars vragen ons natuurlijk altijd af: kan het nóg efficiënter? (hoe minder werk we zelf hebben, hoe beter: automate everything!)
 
-Zoals agile begin 2001 op kwam in het methodiekenlandschap (Kooijman, 2016), zo kwam devops en microservices de afgelopen jaren op in de hands-on kant van ons vakgebied. Dit is allemaal leuk en aardig, maar: kan het dan nóg leaner?
+Zoals agile begin 2001 op kwam in het methodiekenlandschap (Kooijman, 2016), zo kwamen devops en microservices de afgelopen jaren op in de hands-on kant van ons vakgebied. Dit is allemaal leuk en aardig, maar: kan het nóg leaner?
 
 TLDR; dat kan! Lees snel verder >>
 
@@ -14,21 +14,39 @@ TLDR; dat kan! Lees snel verder >>
 
 ![Van atoom tot quark](atom-quark.jpg "Van atoom tot quark")
 
-Quarkus is net zo iets als hierboven staat afgebeeld: het vormt de bouwstenen van een microservices architectuur. Een microservices architectuur geënt op Java dan wel niet te verstaan. Hoe dit in zijn werk gaat, wat de voordelen hiervan zijn én hoe je dit implementeert lees je in deze blogpost. Tevens geef ik je een aantal korte handvatten om zelf aan de slag te gaan met Quarkus in jouw project. Dit is een aanvulling op bestaande, [officiële handleidingen](https://quarkus.io/guides/getting-started). (QuarkusIO, 2021)
+Zoals hierboven staat afgebeeld, vormen deze 'quarks', als het ware de bouwstenen van atomen. Quarkus doet net zo iets, maar biedt meerdere van dit soort 'bouwstenen' aan in de vorm van panklare dependencies en beproefde design patterns.
 
-## Waarom Quarkus?
+Concreet betekent dit dat je met Quarkus allerlei soorten applicaties, redelijk makkelijk kunt realiseren: voor vrijwel alles zijn plugins (verzamelingen van dependencies) beschikbaar, welke in `pom.xml` (maven), of `build.gradle` (gradle) geïncludeerd kunnen worden. Enkele voorbeelden hiervan zijn:
 
-Quarkus is een framework, dat als voornaamste doel heeft Java centraler neer te zetten in de huidige docker-k8s cultuur. De voordelen die Quarkus biedt, zijn dan ook voornamelijk bruikbaar in containerized omgevingen. Gebruik je deze niet? Geen probleem. Dan kun je nog steeds gebruik maken (en voordeel hebben) van de meeste features van Quarkus.
+- quarkus-resteasy-jackson (voor REST JSON applicaties)
+- quarkus-hibernate-orm-panache (voor data(base) centered applicaties)
+- quarkus-grpc (voor gRPC applicaties)
 
-Wil je quarkus gebruiken in je polyglot X micro-services-architectuur? Dit gaat makkelijk met behulp van [GraalVM](https://www.graalvm.org/), waar Quarkus ook ondersteuning voor biedt. (QuarkusIO, 2021) Op deze manier kun je als het ware een en dezelfde runtime image gebruiken voor al je micro-services.
+Deze dependencies zijn rechtstreeks te verkrijgen op [mvnrepository.org](https://mvnrepository.com/artifact/io.quarkus). Dit zijn verzamelingen van bestaande projecten, met hier en daar wat optimisaties voor containerized toepassingen, geheugengebruik, e.d. (daar moet je ongeveer aan denken). Je kunt de ontwikkeling van Quarkus dan ook live volgen (of hieraan bijdragen) op [github](https://github.com/quarkusio/quarkus).
+
+Tevens levert Quarkus een maven ([mvnw](https://github.com/takari/maven-wrapper)) of respectievelijk gradle ([gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html)) wrapper mee (bij het aanmaken van een), waarmee dit soort acties via de command line geautomatiseerd kunnen worden. Je kunt dan bijvoorbeeld zeggen: `./mvnw package`, in plaats van `mvn package`. De wrappers hebben het voornaamste voordeel dat ze de mogelijkheid bevatten build-tools te installeren als die nog niet op het systeem staan (handig in CI/CD omgevingen).
+
+Hoe dit nu allemaal in zijn werk gaat, wat de voordelen hiervan zijn én hoe je dit implementeert lees je in deze blogpost. Tevens geef ik je een aantal korte handvatten om zelf aan de slag te gaan met Quarkus in jouw project. Dit is een aanvulling op bestaande, [officiële handleidingen](https://quarkus.io/guides/getting-started). (QuarkusIO, 2021)
+
+## Wat is Quarkus?
+
+Quarkus is een framework, dat niet zozeer 'nieuwe' dingen doet, maar eerder bestaande dingen bij elkaar zet in een mooi jasje. Het doel? Java aantrekkelijker maken in de huidige docker-k8s cultuur, tenminste, als we de eigen [website](quarkus.io) mogen geloven.
+
+De voordelen die Quarkus biedt, zijn dan ook voornamelijk geënt op moderne, containerized omgevingen (zo'n micro-services-architectuur bijvoorbeeld). Gebruik je deze niet? Geen probleem: dan kun je nog steeds gebruik maken (en voordeel hebben) van de meeste features van Quarkus.
+
+Om terug te komen op deze 'containerized' omgevingen: Quarkus levert kant-en-klare Docker images, waarmee via de ingebouwde build tool (mvnw) direct voor Docker gebouwd kan worden. In plaats van een .jar, rolt er dan een aantrapbare docker container uit.
+
+Om het nog een stapje verder te nemen, biedt Quarkus ook ondersteuning voor Kubernetes: in plaats van een aantrapbare docker container, kan de build tool eerst een docker image bouwen, deze naar een registry pushen, en vervolgens rolt er een direct bruikbare k8s config uit. Is dat even handig!
+
+Tenslotte is ook nog instelbaar dat dit automatisch gedeployed wordt op een k8s cluster naar keuze: hoeven we dan niets meer zelf te doen?
 
 ## De voordelen van Quarkus
 
 Quarkus adverteert met razendsnelle opstarttijden, laag geheugengebruik, near-instant scaling en AOT (Ahead Of Time) compilatie. Dit is relevant, omdat gangbare java JIT (Just In Time) compilatie gebruikt.
 
-Een ander voordeel, wat ik als gebruiker van Quarkus direct merk, is dat er moeite is gedaan de 'user experience' zo vloeiend mogelijk te maken. Met dit bedoel ik uiteraard de ervaring voor ons als developers, aangezien wij de voornaamste gebruikers zijn. Dit is belangrijk, want lang niet alle (in mijn ervaring goede) frameworks zijn zo makkelijk te gebruiken als Quarkus.
+De meeste, geadverteerde performance winsten van Quarkus, zijn alleen bereikbaar als je gebruik maakt van z.g.h. native compilatie. Dit wil zeggen dat je wel java code schrijft, maar bij het uitvoeren van je programmaatje, geen gebruik maakt van een jre (java runtime environment). Dit is mogelijk, met behulp van [GraalVM](https://www.graalvm.org/). Hier komt dan uit je build bijvoorbeeld een x86_64 executable, i.p.v. een .jar.
 
-Deel hiervan vormt een 'wrapper' om maven heen, in de vorm van een `mvnw` script. Verder biedt Quarkus veel standaardoplossingen voor problemen aan, in de vorm van third party libraries, zonder zichzelf dicht te timmeren. Er staat ook geregeld (in de officiële guides): "Wil je dit zelf liever met jouw favoriete tool doen? Dat kan!"
+Een ander voordeel, wat ik als gebruiker van Quarkus direct merk, is dat er moeite is gedaan de 'user experience' (voor developers dus) zo vloeiend mogelijk te maken. Dit is belangrijk, want lang niet alle (in mijn ervaring goede) frameworks zijn zo makkelijk te gebruiken, goed gedocumenteerd en actief als Quarkus.
 
 Om terug te komen op die performance winst: als we de eigen [site](https://quarkus.io) mogen geloven, zou gebruik van Quarkus zelfs meer dan 50% geheugenwinst, en meer dan 75% snellere opstarttijden op moeten leveren:
 
@@ -38,7 +56,7 @@ Dat stellen we zometeen graag zelf aan de kaak, a.d.h.v. een voorbeeldcasus.
 
 ## Quarkus in de praktijk
 
-Genoeg tekst, laten maar eens wat gaan doen!
+Genoeg blabla, tijd voor wat praktische voorbeelden!
 
 > Voor dit voorbeeld maak ik o.a. gebruik van [PitStop](https://github.com/edwinVW/pitstop). Een voorbeeldcasus van [InfoSupport](https://github.com/edwinVW/pitstop). Deze code-along is gebaseerd op bestaande guides die vrij beschikbaar zijn op [quarkus.io](https://quarkus.io/guides/).
 
@@ -130,7 +148,7 @@ public class CustomerResource {
 }
 ```
 
-Om wat te zien als we `GET /customers` uit het endpoint opvragen voeg ik tot slot nog twee 'customers' toe:
+Om wat te zien als we `GET /customers` uit het endpoint opvragen voeg ik tot slot nog twee customers toe:
 
 ```java
 public CustomerResource() {
@@ -141,7 +159,7 @@ public CustomerResource() {
 
 ### Prometheus
 
-Om de geadverteerde performance-winsten te ervaren, kunnen we gebruik maken van Prometheus metrieken.
+Om de geadverteerde performance-winsten inzichtelijk te maken, kunnen we gebruik maken van Prometheus.
 
 Voor het dotnet gedeelte van de applicatie (de originele `CustomerManagementAPI` van PitStop) is toevoegen van onderstaande code voldoende. Installeer wel eerst de [prometheus-net.AspNetCore](https://www.nuget.org/packages/prometheus-net.AspNetCore) nuget package.
 
