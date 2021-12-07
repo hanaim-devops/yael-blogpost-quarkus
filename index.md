@@ -2,7 +2,7 @@
 
 Door: Yael Bakker - [me@yael.fyi](mailto:me@yael.fyi)
 
-[![GitHub followers](https://img.shields.io/github/followers/yvbakker.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/Naereen?tab=followers)
+[![GitHub followers](https://img.shields.io/github/followers/yvbakker.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/yvbakker?tab=followers)
 
 Wij als ontwikkelaars vragen ons natuurlijk altijd af: kan het nóg efficiënter? (hoe minder werk we zelf hebben, hoe beter: automate everything!)
 
@@ -14,9 +14,11 @@ TLDR; dat kan! Lees snel verder >>
 
 ![Van atoom tot quark](atom-quark.jpg "Van atoom tot quark")
 
+Bron: [Berkeley Lab](https://pdg.lbl.gov/chris/museum_version/atom_scale.html)
+
 Zoals hierboven staat afgebeeld, vormen deze 'quarks', als het ware de bouwstenen van atomen. Quarkus doet net zo iets, maar biedt meerdere van dit soort 'bouwstenen' aan in de vorm van panklare dependencies en beproefde design patterns.
 
-Concreet betekent dit dat je met Quarkus allerlei soorten applicaties, redelijk makkelijk kunt realiseren: voor vrijwel alles zijn plugins (verzamelingen van dependencies) beschikbaar, welke in `pom.xml` (maven), of `build.gradle` (gradle) geïncludeerd kunnen worden. Enkele voorbeelden hiervan zijn:
+Concreet betekent dit dat je met Quarkus allerlei soorten applicaties redelijk makkelijk kunt realiseren: voor vrijwel alles is een plugin (verzameling van dependencies) beschikbaar, die in `pom.xml` (maven), of `build.gradle` (gradle) geïncludeerd kunnen worden. Enkele voorbeelden hiervan zijn:
 
 - quarkus-resteasy-jackson (voor REST JSON applicaties)
 - quarkus-hibernate-orm-panache (voor data(base) centered applicaties)
@@ -24,7 +26,7 @@ Concreet betekent dit dat je met Quarkus allerlei soorten applicaties, redelijk 
 
 Deze dependencies zijn rechtstreeks te verkrijgen op [mvnrepository.org](https://mvnrepository.com/artifact/io.quarkus). Dit zijn verzamelingen van bestaande projecten, met hier en daar wat optimisaties voor containerized toepassingen, geheugengebruik, e.d. (daar moet je ongeveer aan denken). Je kunt de ontwikkeling van Quarkus dan ook live volgen (of hieraan bijdragen) op [github](https://github.com/quarkusio/quarkus).
 
-Tevens levert Quarkus een maven ([mvnw](https://github.com/takari/maven-wrapper)) of respectievelijk gradle ([gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html)) wrapper mee (bij het aanmaken van een), waarmee dit soort acties via de command line geautomatiseerd kunnen worden. Je kunt dan bijvoorbeeld zeggen: `./mvnw package`, in plaats van `mvn package`. De wrappers hebben het voornaamste voordeel dat ze de mogelijkheid bevatten build-tools te installeren als die nog niet op het systeem staan (handig in CI/CD omgevingen).
+Tevens levert Quarkus een maven ([mvnw](https://github.com/takari/maven-wrapper)) of respectievelijk gradle ([gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html)) wrapper mee, waarmee dit soort acties via de command line geautomatiseerd kunnen worden. Je kunt dan bijvoorbeeld zeggen: `./mvnw package`, in plaats van `mvn package`. De wrappers hebben het voornaamste voordeel dat ze de mogelijkheid bevatten build-tools te installeren als die nog niet op het systeem staan (handig in CI/CD omgevingen).
 
 Hoe dit nu allemaal in zijn werk gaat, wat de voordelen hiervan zijn én hoe je dit implementeert lees je in deze blogpost. Tevens geef ik je een aantal korte handvatten om zelf aan de slag te gaan met Quarkus in jouw project. Dit is een aanvulling op bestaande, [officiële handleidingen](https://quarkus.io/guides/getting-started). (QuarkusIO, 2021)
 
@@ -32,19 +34,19 @@ Hoe dit nu allemaal in zijn werk gaat, wat de voordelen hiervan zijn én hoe je 
 
 Quarkus is een framework, dat niet zozeer 'nieuwe' dingen doet, maar eerder bestaande dingen bij elkaar zet in een mooi jasje. Het doel? Java aantrekkelijker maken in de huidige docker-k8s cultuur, tenminste, als we de eigen [website](quarkus.io) mogen geloven.
 
-De voordelen die Quarkus biedt, zijn dan ook voornamelijk geënt op moderne, containerized omgevingen (zo'n micro-services-architectuur bijvoorbeeld). Gebruik je deze niet? Geen probleem: dan kun je nog steeds gebruik maken (en voordeel hebben) van de meeste features van Quarkus.
+De voordelen die een framework als Quarkus biedt, zijn dan ook voornamelijk geënt op moderne, containerized omgevingen (een micro-services-architectuur bijvoorbeeld). Gebruik je deze niet? Geen probleem: dan kun je nog steeds gebruik maken (en voordeel hebben) van de meeste features van Quarkus.
 
-Om terug te komen op deze 'containerized' omgevingen: Quarkus levert kant-en-klare Docker images, waarmee via de ingebouwde build tool (mvnw) direct voor Docker gebouwd kan worden. In plaats van een .jar, rolt er dan een aantrapbare docker container uit.
+Quarkus is niet hét antwoord uit de java-hoek voor toepassingen in containerized omgevingen. Zo is er bijvoorbeeld ook [micronaut](https://micronaut.io).
 
-Om het nog een stapje verder te nemen, biedt Quarkus ook ondersteuning voor Kubernetes: in plaats van een aantrapbare docker container, kan de build tool eerst een docker image bouwen, deze naar een registry pushen, en vervolgens rolt er een direct bruikbare k8s config uit. Is dat even handig!
+Om terug te komen op deze 'containerized' omgevingen: Quarkus levert kant-en-klare Docker images, waarmee via de ingebouwde build tool (keuze uit maven of gradle) direct voor Docker gebouwd kan worden. In plaats van een .jar, rolt er dan een docker container image uit.
 
-Tenslotte is ook nog instelbaar dat dit automatisch gedeployed wordt op een k8s cluster naar keuze: hoeven we dan niets meer zelf te doen?
+Om het nog een stapje verder te nemen, biedt Quarkus ook ondersteuning voor Kubernetes: in plaats van een kant-en-klare docker container, kan de build tool eerst een docker image bouwen, deze naar een registry pushen, en vervolgens rol er een direct bruikbare kubernetes config uit. Is dat even handig! Dit kun je overigens dan ook automatisch deployen op een kubernetes cluster, waardoor je er eigenlijk helemaal geen omkijken meer naar hebt.
 
 ## De voordelen van Quarkus
 
-Quarkus adverteert met razendsnelle opstarttijden, laag geheugengebruik, near-instant scaling en AOT (Ahead Of Time) compilatie. Dit is relevant, omdat gangbare java JIT (Just In Time) compilatie gebruikt.
+Quarkus adverteert met razendsnelle opstarttijden, laag geheugengebruik, near-instant scaling en AOT (Ahead Of Time) compilatie. Dit is relevant, omdat gangbare java JIT (Just In Time) compilatie gebruikt, en java over het algemeen niet bekend staat als een moderne, razendsnelle taal. Dat is overigens niet onbetwist. [(Lewis & Neumann, 2020)](http://www.scribblethink.org/Computer/javaCbenchmark.html)
 
-De meeste, geadverteerde performance winsten van Quarkus, zijn alleen bereikbaar als je gebruik maakt van z.g.h. native compilatie. Dit wil zeggen dat je wel java code schrijft, maar bij het uitvoeren van je programmaatje, geen gebruik maakt van een jre (java runtime environment). Dit is mogelijk, met behulp van [GraalVM](https://www.graalvm.org/). Hier komt dan uit je build bijvoorbeeld een x86_64 executable, i.p.v. een .jar.
+De meeste, geadverteerde performance winsten van Quarkus, zijn alleen bereikbaar als je gebruik maakt van z.g.h. native compilatie. Dit wil zeggen dat je wel java code schrijft, maar bij het uitvoeren van je programmaatje, geen gebruik maakt van een jre (java runtime environment). Dit is mogelijk, met behulp van [GraalVM](https://www.graalvm.org/). Hier komt dan uit je build bijvoorbeeld een x86_64 of arm64 executable, i.p.v. een `.jar`.
 
 Een ander voordeel, wat ik als gebruiker van Quarkus direct merk, is dat er moeite is gedaan de 'user experience' (voor developers dus) zo vloeiend mogelijk te maken. Dit is belangrijk, want lang niet alle (in mijn ervaring goede) frameworks zijn zo makkelijk te gebruiken, goed gedocumenteerd en actief als Quarkus.
 
@@ -52,11 +54,9 @@ Om terug te komen op die performance winst: als we de eigen [site](https://quark
 
 ![Quarkus Performance Metrics](quarkus_metrics_graphic_bootmem_wide.png)
 
-Dat stellen we zometeen graag zelf aan de kaak, a.d.h.v. een voorbeeldcasus.
+Dat stellen we zometeen graag zelf aan de kaak, a.d.h.v. een voorbeeldje.
 
 ## Quarkus in de praktijk
-
-Genoeg blabla, tijd voor wat praktische voorbeelden!
 
 > Voor dit voorbeeld maak ik o.a. gebruik van [PitStop](https://github.com/edwinVW/pitstop). Een voorbeeldcasus van [InfoSupport](https://github.com/edwinVW/pitstop). Deze code-along is gebaseerd op bestaande guides die vrij beschikbaar zijn op [quarkus.io](https://quarkus.io/guides/).
 
@@ -159,7 +159,7 @@ public CustomerResource() {
 
 ### Prometheus
 
-Om de geadverteerde performance-winsten inzichtelijk te maken, kunnen we gebruik maken van Prometheus.
+Om de geadverteerde performance inzichtelijk te maken, kunnen we gebruik maken van Prometheus.
 
 Voor het dotnet gedeelte van de applicatie (de originele `CustomerManagementAPI` van PitStop) is toevoegen van onderstaande code voldoende. Installeer wel eerst de [prometheus-net.AspNetCore](https://www.nuget.org/packages/prometheus-net.AspNetCore) nuget package.
 
@@ -231,12 +231,6 @@ Voor de mate van stabiliteit van deze metingen, kunnnen we snel even de standaar
 | .net (stddev, ms) | quarkus (stddev, ms) |
 | ----------------- | -------------------- |
 | 18.257            | 8.817                |
-
-Lager = (in dit geval) stabieler.
-
-Meer overtuiging heeft het niet nodig: quarkus is duidelijk sneller in dit geval.
-
-\*\*Disclaimer: bovenstaande resultaten zijn onderhevig aan vele factoren, en dienen voornamelijk als anekdote over de beweerde perfomance winst van Quarkus. Werkelijk (reproduceerbaar) onderzoek is uiteraard beter opgezet (mag ik hopen).
 
 ### Containers
 
